@@ -1,0 +1,11 @@
+max_retry: 3
+timeout_seconds: 30
+memory_enabled: true
+hitl:
+  enabled: true
+  max_hitl: 8
+top_k: 5
+# Deployment injects the provisioned caller-to-customer mapping and customer KB
+# connections. Empty maps intentionally fail closed; there is no default KB.
+caller_customer_map: {}
+kb_connections: {}

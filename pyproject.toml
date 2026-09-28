@@ -1,0 +1,44 @@
+[project]
+name = "log-c2-109"
+version = "1.0.0"
+description = "Customs Shipment Document Completeness Validator — AgentCore Template"
+requires-python = ">=3.11"
+# The framework (agenticstar-agentcore) is NOT a public-PyPI dependency; it is
+# supplied by the platform's own package registry at build time. Pinning it here
+# would make `pip install -e .` fail because it is not resolvable from the
+# default index.
+dependencies = [
+    "agenticstar-agentcore[marketplace,openai]==1.0.3",]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.3",
+    "pytest-cov==5.0.0",
+    "pytest-asyncio==1.4.0",
+    "ruff==0.4.4",
+    "mypy==1.10.0",
+]
+
+[build-system]
+requires = ["setuptools==68.2.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+[tool.ruff.lint.per-file-ignores]
+# 上流 scaffold master 由来の既知違反のみを該当ファイル限定で抑止する。
+# 配布元の PB テストなので本体を書き換えず byte-identity を維持する。
+"tests/proof_of_boundary/test_import_isolation.py" = ["F541"]
+"tests/proof_of_boundary/test_state_safety.py" = ["F541"]
+# 写経部品（# PART: cat2-graph-skeleton）。上流 parts master では解消済みだが、
+# 部品の版上げは挙動を伴うため別 MR で行う。ここでは byte-identity を優先して抑止する。
+"src/cat2_graph_skeleton/graph_node.py" = ["F402"]
+# 写経部品のテスト。上流 parts master では解消済みだが、部品の版上げは挙動を伴うため
+# 別 MR で行う。ここでは byte-identity を優先して抑止する。
+"tests/parts/cat2-graph-skeleton/test_graph_node.py" = ["F401"]

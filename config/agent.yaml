@@ -1,0 +1,27 @@
+# Agent Manifest — AgentRegistry entry point
+# AgentRegistry reads every key below at ROOT level; do not nest under agent:.
+id: "LOG-C2-109"
+name: "Customs Shipment Document Completeness Validator"
+namespace: "log"
+version: "1.0.0"
+enabled: true
+category: "Cat 2"
+# Static generation contract (review-criteria: deterministic | llm・未宣言は deterministic 既定).
+# src/nodes は任意の config["llm"] のみ参照し、既定 config は LLM を注入しない。
+generation_mode: "llm"  # deterministic | llm
+# 実 LLM 1回転チェック（work/scripts/mrb_live_llm_check.py）で config["llm"] シーム経由の
+# 呼び出しを 2 回実測し、consistency_findings 等に実質的な内容が出ることを確認している。
+industry: "LOG"
+
+# Opaque compatibility metadata. Runtime tuning lives in config/config.yaml.
+base_type: "AgentBaseGraph"
+
+# Entry point — single dotted import path (module.Class).
+class: "src.graph.graph.CustomsDocValidatorGraph"
+
+# Security
+required_trust_level: "VERIFIED_EXTERNAL"
+
+requires:
+  secrets: []
+  extras: []
